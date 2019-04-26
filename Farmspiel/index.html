@@ -1,0 +1,320 @@
+<html>
+	<head>
+	<meta charset="utf-8">
+	<title>Farm</title>
+	<style type="text/css"> 
+	body{background-color:green;}
+	.f1{height:100px;width:100px;border-style:solid;border-color:#ffff55;background-color:#331503}
+	.adress{display:none}
+	#field1{background-color:#331503;border-style:solid;border-color:#ffff55;border-width:6px;width:200px;height:200px;position:absolute;left:50px;top:50px;}
+	#potato{position:absolute;width:110;height:80;background:none;font-weight:bold;color:black;top:10px;left:10px}
+	#carrot{position:absolute;width:110;height:80;background:none;font-weight:bold;color:black;left:130px;top:10px}
+	
+	#prehoe{position:absolute;width:110;height:80;background-color:white;font-weight:bold;color:black;top:10px;left:10px}
+	#hoe{position:absolute;width:110;height:80;background:none;font-weight:bold;color:black;top:10px;left:10px}
+	
+	#prewater{position:absolute;width:110;height:80;background-color:white;font-weight:bold;color:black;top:10px;left:130px}
+	#water{position:absolute;width:110;height:80;background:none;font-weight:bold;color:black;top:10px;left:130px}
+	
+	#predung{position:absolute;width:110;height:80;background-color:white;font-weight:bold;color:black;top:10px;left:250px}
+	#dung{position:absolute;width:110;height:80;background:none;font-weight:bold;color:black;top:10px;left:250px}
+	
+	#presuperdung{position:absolute;width:110;height:80;background-color:white;font-weight:bold;color:black;top:10px;left:370px}
+	#superdung{position:absolute;width:110;height:80;background:none;font-weight:bold;color:black;top:10px;left:370px}
+	
+	#prehelper{position:absolute;width:110;height:80;background-color:white;font-weight:bold;color:black;top:10px;left:490px}
+	#helper{position:absolute;width:110;height:80;background:none;font-weight:bold;color:black;top:10px;left:490px}
+	
+	#wheat{position:absolute;width:110;height:80;background:none;font-weight:bold;color:black;left:250px;top:10px}
+	#fruitbar{position:absolute;left:300px;background-color:#ffffa0;height:100px;width:370px;border-style:solid;border-width:5px;border-color:#332211;top:5px}
+	#toolbar{position:absolute;left:300px;background-color:#888888;height:100px;width:610px;border-style:solid;border-width:5px;border-top-color:#999999;border-left-color:#999999;border-right-color:#666666;border-bottom-color:#666666;top:125px}
+	#chick{visibility:hidden}
+	#stop{background-color:#ff7777;border-top-color:#ff7c7c;border-left-color:#ff7c7c;border-right-color:#ff6666;border-bottom-color:#ff6666;position:absolute;left:115px;top:20px}
+	</style>
+	<script >
+		var to1=[];
+		var statusf1=[
+		["empty"],["empty"],["empty"],["empty"],
+		]
+		var fruits={
+			"carrot":[1, 150],
+			"potato":[1, 250],
+			"wheat":[1,  400]
+			};
+		var tools={
+			"dung":[5, 1000],
+			"superdung":[3, 5000],
+			"water":[2000, 3],
+			"helper":[10, 500,"inactive"]
+			};
+		var e="";
+		var a=0;	
+		var fruit=null;
+		var beforef1= "<input type='text' style='position:absolute;width:96px;left:0px;top:0px;border-style:none;visibility:hidden;font-weight:bold;background-color:#9999ff' name='f1t' value='0' readonly /><input  type='number' style='display:none' name='f1rt' value='0' readonly />";
+		var to2=setTimeout(resetf1, 100);
+		function resetf1(){
+			document.getElementsByName('f1')[0].style.backgroundColor="#331503";
+			document.getElementsByName('f1')[1].style.backgroundColor="#331503";
+			document.getElementsByName('f1')[2].style.backgroundColor="#331503";
+			document.getElementsByName('f1')[3].style.backgroundColor="#331503";
+			fruit=null;
+			document.getElementById('potato').innerHTML=fruits["potato"][0];
+		    document.getElementById('carrot').innerHTML=fruits["carrot"][0];
+		    document.getElementById('wheat').innerHTML=fruits["wheat"][0];
+		    
+		    document.getElementById('water').innerHTML=tools["water"][0];
+		    document.getElementById('dung').innerHTML=tools["dung"][0];
+		    document.getElementById('superdung').innerHTML=tools["superdung"][0];
+		    document.getElementById('helper').innerHTML=tools["helper"][0];
+		    
+		    document.getElementById('f1p').value="";
+			
+			}
+			
+	function fieldf1(p){
+ resetf1();
+ document.getElementsByName('f1')[p].style.backgroundColor="#663003";
+ document.getElementById('f1p').value=p;
+if(statusf1[p][0]==="ready"){
+	takef1(p);
+	}
+
+ 	}
+ 	function seedf1(fruit){
+		p=document.getElementById('f1p').value;
+		if(p!=""){
+		if(statusf1[p][0]==="empty"){
+		document.getElementById('potato').innerHTML=fruits.potato[0];
+		document.getElementById('carrot').innerHTML=fruits.carrot[0];
+		document.getElementById('wheat').innerHTML=fruits.wheat[0];
+		if (fruit===null){}
+		else if(fruits[fruit][0]>0){
+			p=document.getElementById('f1p').value;
+			fruits[fruit][0]-=1;
+		    document.getElementById('potato').innerHTML=fruits.potato[0];
+		    document.getElementById('carrot').innerHTML=fruits.carrot[0];
+		    document.getElementById('wheat').innerHTML=fruits.wheat[0];
+			statusf1[p][0]="growing";
+			statusf1[p][1]=fruit;
+			var growtime=(fruits[fruit][1])*1000;
+			var a= parseFloat(growtime/1000);
+			var afterf1=beforef1+("<img src='growing/"+fruit+".png' />");
+			document.getElementsByName('f1')[p].innerHTML=afterf1; 
+			countdownf1(a,p);
+			resetf1();
+			document.getElementsByName('f1t')[p].style.visibility="visible";
+			function countdownf1(a,p){
+				a-=1;
+				document.getElementsByName('f1rt')[p].value=a
+				var s=a;
+				var m=Math.floor(s/60);
+				var s=Math.round(((s/60)-m)*60);
+				if (m!=0){
+				document.getElementsByName('f1t')[p].value=m+" MIN "+s+" SEC";
+			    }
+			    else if(m===0){
+				document.getElementsByName('f1t')[p].value=s+" SEC";	
+					}
+				if (a>0){
+					
+				to1[p]=setTimeout(countdownf1, 1000, a, p);	
+			}
+			else if (a===0){
+				readyf1(p);
+				}		
+				} 
+			
+			}
+			else{
+				window.alert("Nicht genug Samen!");
+				}
+		}}}
+		function readyf1(p){
+			document.getElementsByName('f1t')[p].style.visibility="hidden";
+			afterf1=beforef1+("<img src='ready/"+statusf1[p][1]+".png' />");
+			document.getElementsByName('f1')[p].innerHTML=afterf1;
+			statusf1[p][0]="ready";
+			clearTimeout(to1[p])
+			var chick=document.getElementById('chick');
+			chick.play();
+			resetf1();
+			if (tools.helper[2]==="active"){
+				if(tools.helper[0]>0){
+					var fruit=statusf1[p][1];
+					takef1(p);
+					tools.helper[0]-=1;
+					document.getElementById('f1p').value=p;
+                    seedf1(fruit);
+					}
+				else{
+					caref1("helper");
+
+					}	
+				}
+						}
+		function takef1(p){
+			fruit=statusf1[p][1];
+			if(statusf1[p][0]==="ready"){
+			if(statusf1[p][2]==="superdung"){
+			var b=(Math.floor(Math.random()*5)+2)*(Math.floor(Math.random()*5)+2);
+			fruits[fruit][0]+=b;	
+				}	
+			else if(statusf1[p][2]==="dung"){
+				fruits[fruit][0]+=6;
+				}	
+			else{
+			var b=Math.floor(Math.random()*5)+2;
+			fruits[fruit][0]+=b;	
+			
+		}
+		statusf1[p]=["empty"];
+		document.getElementsByName('f1')[p].innerHTML=beforef1;
+		resetf1();
+				
+				
+				}
+			else{
+				var c=window.confirm("Wenn du jetzt erntest, erhälst du keinen Ertrag!!!");
+				if(c){
+				fruits[fruit][0]+=1;
+				statusf1[p]=["empty"];	
+				clearTimeout(to1);
+				document.getElementsByName('f1')[p].innerHTML=beforef1;
+				resetf1();
+					}
+				else{
+					resetf1();
+					}
+				}
+			
+			
+			}
+		function caref1(tool){
+			if(tool==="helper"){
+				if(tools.helper[2]==="active"){
+					tools.helper[2]="inactive";
+					document.getElementById('helper').style.borderWidth="";
+					document.getElementById('helper').style.borderColor="";
+					}
+				else if(tools.helper[2]==="inactive"){
+					if(tools.helper[0]>0){
+					tools.helper[2]="active";
+					document.getElementById('helper').style.borderWidth="6px";
+					document.getElementById('helper').style.borderColor="blue";
+					}
+					else{window.alert("Keine Mähdrescher mehr verfügbar")}
+					}
+				resetf1();
+				
+				}
+			p=document.getElementById('f1p').value;
+			if(p!=""){
+			if(statusf1[p][0]==="growing"){
+			if (tool==="hoe"){
+				takef1(p);
+				}	
+			else if (tool==="water"){
+				var time=document.getElementsByName('f1rt')[p].value;
+				var water=tools.water[0];
+				if (water>=time){
+					var c=window.confirm("Du verbrauchst "+time+" Liter Wasser");
+					if(c){
+					tools.water[0]-=time;
+					readyf1(p);}
+					resetf1();
+					}
+				else{
+					window.alert("Fülle deinen Wasservorrat auf!");
+					}	
+				}
+			else if (tool==="superdung"){
+				if(statusf1[p][2]==="dung"||statusf1[p][2]==="superdung"){
+					window.alert("Schon Gedüngt!");}
+				else{
+					tools.superdung[0]-=1;
+					statusf1[p][2]="superdung";
+					}	
+					resetf1();
+					}
+					
+			else if (tool==="dung"){
+				if(statusf1[p][2]==="dung"||statusf1[p][2]==="superdung"){
+					window.alert("Schon Gedüngt!");}
+				else{
+					tools.dung[0]-=1;
+					statusf1[p][2]="dung";
+					}	
+					resetf1();
+				}	
+				}
+						
+			
+				
+				
+			}
+				}
+				
+	</script>
+</head>
+<body>
+        <input type="text" value="0" class="adress" id="f1p" readonly />
+        
+        
+		<div id="field1">
+		<button name="f1" class="f1"onclick="fieldf1(0)" style="position:absolute;top:0px;left:0px;" ><input  type="text" style="visibility:hidden" name="f1t" value="0" readonly /><input  type='number' style='display:none' name='f1rt' value='0' readonly /></button> 
+		<button name="f1" class="f1"onclick="fieldf1(1)" style="position:absolute;top:0px;left:100px;" ><input  type="text" style="visibility:hidden" name="f1t" value="0" readonly /><input  type='number' style='display:none' name='f1rt' value='0' readonly /></button> 
+		<button name="f1" class="f1"onclick="fieldf1(2)" style="position:absolute;top:100px;left:0px;" ><input  type="text" style="visibility:hidden" name="f1t" value="0" readonly /><input  type='number' style='display:none' name='f1rt' value='0' readonly /></button> 
+		<button name="f1" class="f1"onclick="fieldf1(3)" style="position:absolute;top:100px;left:100px;" ><input  type="text" style="visibility:hidden" name="f1t" value="0" readonly /><input  type='number' style='display:none' name='f1rt' value='0' readonly /></button> 
+		</div>
+		
+		<audio src="chick.mp3" id="chick"></audio>
+		<button id="stop" onclick="resetf1();">Abbrechen</button>
+		
+		
+		<div id="fruitbar">
+			
+		<img style="position:absolute;top:10px;left:10px" src='seed/potato.jpg' width="110"height="80">
+		<button onclick='seedf1("potato")'id="potato"></button>
+		
+		<img style="position:absolute;left:130px;top:10px" src='seed/carrot.jpg' width="110"height="80">
+		<button onclick='seedf1("carrot")'id="carrot"></button>
+		
+		<img style="position:absolute;left:250px;top:10px" src='seed/wheat.jpg' width="110"height="80">
+		<button onclick='seedf1("wheat")'id="wheat"></button>
+		
+		</div>
+		
+		
+		<div id="toolbar">
+			
+		<button id="prehoe"></button>
+		<img style="position:absolute;top:12px;left:30px" src='tools/hoe.gif' >
+		<button onclick='caref1("hoe")'id="hoe"></button>
+		
+		<button id="prewater"></button>
+		<img style="position:absolute;top:12px;left:160px" src='tools/water.gif' >
+		<button onclick='caref1("water")'id="water"></button>
+		
+		<button id="predung"></button>
+		<img style="position:absolute;top:12px;left:270px" src='tools/dung.gif' >
+		<button onclick='caref1("dung")'id="dung"></button>
+		
+		<button id="presuperdung"></button>
+		<img style="position:absolute;top:12px;left:400px" src='tools/superdung.gif' >
+		<button onclick='caref1("superdung")'id="superdung"></button>
+		
+		<button id="prehelper"></button>
+		<img style="position:absolute;top:10px;left:490px" src='tools/helper.gif' alt="Mähdrescher" >
+		<button onclick='caref1("helper")'id="helper"></button>
+		
+		
+		
+		</div>
+		<div id="shop">
+		
+		</div>
+	
+	
+	</body>
+</html>
+	
