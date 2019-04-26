@@ -4,7 +4,8 @@ var nodeConfig={
 	dirt:"solid",
 	lava:"liquid",
 	water:"liquid",
-	dirt_grass:"solid"
+	dirt_grass:"solid",
+	cobblestone:"solid"
 	}
 var nodeLiquid={
 	stone:"",
@@ -12,7 +13,9 @@ var nodeLiquid={
 	dirt:"",
 	lava:"lava",
 	water:"water",
-	dirt_grass:""
+	dirt_grass:"",
+	cobblestone:""
+	
 	}	
 var nodeTextures={
 	stone:"url(TexturePacks/"+TexturePack+"/stone.jpg)",
@@ -20,5 +23,6 @@ var nodeTextures={
 	dirt:"url(TexturePacks/"+TexturePack+"/dirt_normal.jpg)",
 	lava:"url(TexturePacks/"+TexturePack+"/lava.jpg)",
 	water:"url(TexturePacks/"+TexturePack+"/water.jpg)",
-	dirt_grass:"url(TexturePacks/"+TexturePack+"/dirt.jpg)"
+	dirt_grass:"url(TexturePacks/"+TexturePack+"/dirt.jpg)",
+	cobblestone:"url(TexturePacks/"+TexturePack+"/cobblestone.jpg)"
 	}	

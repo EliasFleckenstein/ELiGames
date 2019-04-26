@@ -3,12 +3,14 @@ if(SimpleDigging){
 		stone:10,
 		dirt:3,
 		dirt_grass:3,
+		cobblestone:10,
 
 		}
 	var nodeCreativHardness={
 		stone:0,
 		dirt:0,
 		dirt_grass:0,
+		cobblestone:0,
 
 		}	
 	var nodeUseHardness=nodeHardness;	
